@@ -331,8 +331,8 @@ export default function InventoryManagement({
                       <span className="font-mono text-gray-800 block">{p.barcode}</span>
                       <span className="text-[10px] text-gray-400 font-mono italic mt-0.5 block">SKU: {p.sku}</span>
                     </td>
-                    <td className="py-4 px-6 font-mono font-bold text-gray-500">${p.purchasePrice.toFixed(2)}</td>
-                    <td className="py-4 px-6 font-mono font-bold text-gray-800">${p.salePrice.toFixed(2)}</td>
+                    <td className="py-4 px-6 font-mono font-bold text-gray-500">Rs. {p.purchasePrice.toFixed(2)}</td>
+                    <td className="py-4 px-6 font-mono font-bold text-gray-800">Rs. {p.salePrice.toFixed(2)}</td>
                     <td className="py-4 px-6 text-center">
                       <div className="inline-flex items-center justify-center bg-green-50 text-green-700 font-mono font-bold rounded-lg px-2.5 py-1 text-[11px]">
                         {p.profitMargin}%
@@ -498,7 +498,7 @@ export default function InventoryManagement({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1">Purchase Cost Price ($) *</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-1">Purchase Cost Price (Rs.) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -511,7 +511,7 @@ export default function InventoryManagement({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1">Sale Selling Price ($) *</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-1">Sale Selling Price (Rs.) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -555,7 +555,7 @@ export default function InventoryManagement({
                   Calculated Profit Index:
                 </span>
                 <span className="font-mono font-bold">
-                  Profit: ${computedProfit.toFixed(2)} | Margin: <span className="text-sm font-extrabold">{computedMargin}%</span>
+                  Profit: Rs. {computedProfit.toFixed(2)} | Margin: <span className="text-sm font-extrabold">{computedMargin}%</span>
                 </span>
               </div>
 

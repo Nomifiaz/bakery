@@ -272,7 +272,7 @@ export default function CustomersManagement({
                         </div>
                       </div>
                       <div className="text-right">
-                        <span className="font-mono font-extrabold text-[#580c1f]">${tx.total.toFixed(2)}</span>
+                        <span className="font-mono font-extrabold text-[#580c1f]">Rs. {tx.total.toFixed(2)}</span>
                         <p className="text-[9px] text-emerald-700 font-bold block mt-0.5">{tx.paymentMethod}</p>
                       </div>
                     </div>

@@ -392,7 +392,7 @@ export default function POSBilling({
                 <option value="" disabled>Resume Hold...</option>
                 {heldTransactions.map(t => (
                   <option key={t.id} value={t.id}>
-                    Invoice #{t.invoiceNumber} - ${t.total.toFixed(2)} ({t.customerName})
+                    Invoice #{t.invoiceNumber} - Rs. {t.total.toFixed(2)} ({t.customerName})
                   </option>
                 ))}
               </select>
@@ -480,7 +480,7 @@ export default function POSBilling({
                     {prod.name}
                   </h4>
                   <div className="flex justify-between items-baseline mt-2">
-                    <span className="text-xs font-bold text-gray-900">${prod.salePrice.toFixed(2)}</span>
+                    <span className="text-xs font-bold text-gray-900">Rs. {prod.salePrice.toFixed(2)}</span>
                     <span className="text-[10px] text-gray-400 font-mono font-medium">Qty: {prod.stockQuantity}</span>
                   </div>
                 </div>
@@ -546,7 +546,7 @@ export default function POSBilling({
                   {item.isManual ? 'Manual Entry' : 'Physical SKU'}
                 </span>
                 <p className="text-xs font-bold text-gray-800 truncate mt-0.5">{item.name}</p>
-                <p className="text-xs text-gray-500 font-mono mt-0.5">${item.price.toFixed(2)} each</p>
+                <p className="text-xs text-gray-500 font-mono mt-0.5">Rs. {item.price.toFixed(2)} each</p>
                 {item.notes && (
                   <p className="text-[10px] text-zinc-400 bg-zinc-100 px-1.5 py-0.5 rounded italic mt-1 inline-block">
                     Notes: {item.notes}
@@ -557,7 +557,7 @@ export default function POSBilling({
               {/* Increments and actions */}
               <div className="flex flex-col items-end justify-between h-full gap-2 flex-none">
                 <span className="text-xs font-display font-bold text-gray-800">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  Rs. {(item.price * item.quantity).toFixed(2)}
                 </span>
                 
                 <div className="flex items-center bg-white border border-gray-200 rounded-lg p-0.5 shadow-xs">
@@ -593,14 +593,14 @@ export default function POSBilling({
           
           <div className="flex justify-between text-xs text-gray-500">
             <span>Subtotal:</span>
-            <span className="font-semibold font-mono">${subtotal.toFixed(2)}</span>
+            <span className="font-semibold font-mono">Rs. {subtotal.toFixed(2)}</span>
           </div>
 
           {/* Loyalty auto disclaimer */}
           {customerLoyaltyDiscount > 0 && (
             <div className="flex justify-between text-[11px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-lg">
               <span>Loyalty Points Discount ({customerLoyaltyDiscount}%):</span>
-              <span className="font-mono">-${((subtotal * customerLoyaltyDiscount) / 100).toFixed(2)}</span>
+              <span className="font-mono">-Rs. {((subtotal * customerLoyaltyDiscount) / 100).toFixed(2)}</span>
             </div>
           )}
 
@@ -622,7 +622,7 @@ export default function POSBilling({
                 onChange={(e) => setDiscountType(e.target.value as 'fixed' | 'percent')}
                 className="bg-transparent text-gray-600 font-semibold cursor-pointer outline-none ml-1 text-[10px]"
               >
-                <option value="fixed">$</option>
+                <option value="fixed">Rs.</option>
                 <option value="percent">%</option>
               </select>
             </div>
@@ -643,17 +643,17 @@ export default function POSBilling({
 
           <div className="flex justify-between text-xs text-gray-500">
             <span>Taxes & Levies:</span>
-            <span className="font-semibold font-mono">${taxAmount.toFixed(2)}</span>
+            <span className="font-semibold font-mono">Rs. {taxAmount.toFixed(2)}</span>
           </div>
           
           <div className="flex justify-between text-xs text-gray-500">
             <span>Discount Adjustments:</span>
-            <span className="font-semibold font-mono">-${calculatedDiscount.toFixed(2)}</span>
+            <span className="font-semibold font-mono">-Rs. {calculatedDiscount.toFixed(2)}</span>
           </div>
 
           <div className="flex justify-between text-sm text-gray-900 border-t border-zinc-200/60 pt-2 flex-none">
             <span className="font-extrabold font-display">Total Bill Value:</span>
-            <span className="font-extrabold font-mono text-base text-[#580c1f]">${total.toFixed(2)}</span>
+            <span className="font-extrabold font-mono text-base text-[#580c1f]">Rs. {total.toFixed(2)}</span>
           </div>
 
           {/* Billing active flow shortcuts */}
@@ -710,7 +710,7 @@ export default function POSBilling({
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-1">Unit Selling Price ($) *</label>
+                  <label className="block text-xs font-bold text-gray-500 mb-1">Unit Selling Price (Rs.) *</label>
                   <input
                     type="number"
                     step="0.01"
@@ -786,7 +786,7 @@ export default function POSBilling({
               {/* Grand total visual indicator */}
               <div className="bg-red-50/20 border border-red-50 text-[#580c1f] rounded-2xl p-4 text-center">
                 <p className="text-xs font-mono uppercase tracking-widest font-semibold text-gray-400">Total Bill Payable</p>
-                <p className="text-3xl font-mono font-bold mt-1">${total.toFixed(2)}</p>
+                <p className="text-3xl font-mono font-bold mt-1">Rs. {total.toFixed(2)}</p>
               </div>
 
               {/* Direct multiple payment selector buttons */}
@@ -814,7 +814,7 @@ export default function POSBilling({
               {paymentMethod === 'Cash' && (
                 <div className="p-4 bg-gray-50 rounded-2xl space-y-3">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-bold text-gray-600">Calculated Cash Tendered ($)</label>
+                    <label className="text-xs font-bold text-gray-600">Calculated Cash Tendered (Rs.)</label>
                     <span 
                       onClick={() => setReceivedCash(total.toFixed(2))}
                       className="text-[10px] font-bold text-[#580c1f] underline cursor-pointer"
@@ -835,7 +835,7 @@ export default function POSBilling({
                     <div className="flex justify-between items-center text-xs pt-2 border-t border-gray-200/50">
                       <span className="font-semibold text-gray-500">Return Change:</span>
                       <span className="font-mono font-bold text-lg text-[#580c1f]">
-                        ${changeExpected.toFixed(2)}
+                        Rs. {changeExpected.toFixed(2)}
                       </span>
                     </div>
                   )}
@@ -989,15 +989,15 @@ export default function POSBilling({
                   
                   {completedTx.items.map((item) => (
                     <div key={item.id} className="flex justify-between">
-                      <div className="flex flex-col max-w-[50%]">
+                       <div className="flex flex-col max-w-[50%]">
                         <span className="font-bold">{item.name}</span>
                         {item.notes && <span className="text-[8px] text-zinc-400 font-sans mt-0.5">Note: {item.notes}</span>}
                       </div>
                       <span className="text-zinc-500 font-mono">
-                        {item.quantity} x ${item.price.toFixed(2)}
+                        {item.quantity} x Rs. {item.price.toFixed(2)}
                       </span>
                       <span className="text-right font-bold font-mono">
-                        ${(item.quantity * item.price).toFixed(2)}
+                        Rs. {(item.quantity * item.price).toFixed(2)}
                       </span>
                     </div>
                   ))}
@@ -1009,26 +1009,26 @@ export default function POSBilling({
                 <div className="text-right font-mono text-[10px] space-y-1 p-1">
                   <div className="flex justify-between">
                     <span>Subtotal:</span>
-                    <span>${completedTx.subtotal.toFixed(2)}</span>
+                    <span>Rs. {completedTx.subtotal.toFixed(2)}</span>
                   </div>
                   
                   {completedTx.discount > 0 && (
                     <div className="flex justify-between text-emerald-700">
                       <span>Discount Given:</span>
-                      <span>-${completedTx.discount.toFixed(2)}</span>
+                      <span>-Rs. {completedTx.discount.toFixed(2)}</span>
                     </div>
                   )}
 
                   {completedTx.tax > 0 && (
                     <div className="flex justify-between">
                       <span>Sales Tax ({settings.taxRate}%):</span>
-                      <span>${completedTx.tax.toFixed(2)}</span>
+                      <span>Rs. {completedTx.tax.toFixed(2)}</span>
                     </div>
                   )}
 
                   <div className="flex justify-between text-xs font-bold border-t border-zinc-900 border-dashed pt-1.5 mt-1 text-[#580c1f]">
                     <span>Grand Total:</span>
-                    <span>${completedTx.total.toFixed(2)}</span>
+                    <span>Rs. {completedTx.total.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -1039,7 +1039,7 @@ export default function POSBilling({
                   <div className="text-left text-[9px] font-mono mb-4 text-[#580c1f]">
                     <p className="font-bold">Split Bills Payments Checked:</p>
                     {completedTx.splitPayments.map((p, idx) => (
-                      <p key={idx} className="pl-2">• {p.method}: ${p.amount.toFixed(2)}</p>
+                      <p key={idx} className="pl-2">• {p.method}: Rs. {p.amount.toFixed(2)}</p>
                     ))}
                     <div className="border-t border-dashed border-zinc-300 my-4" />
                   </div>

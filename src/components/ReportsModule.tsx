@@ -199,7 +199,7 @@ export default function ReportsModule({ products, transactions, categories }: Re
         <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between">
           <div>
             <p className="text-xs font-mono uppercase text-gray-400 font-bold tracking-wider">Total Sales Revenue</p>
-            <h3 className="text-3xl font-display font-black text-gray-800 mt-2">${aggregatedStats.sales.toFixed(2)}</h3>
+            <h3 className="text-3xl font-display font-black text-gray-800 mt-2">Rs. {aggregatedStats.sales.toFixed(2)}</h3>
           </div>
           <p className="text-[10px] text-green-600 font-bold mt-4">+12.5% vs matching period yesterday</p>
         </div>
@@ -208,7 +208,7 @@ export default function ReportsModule({ products, transactions, categories }: Re
         <div className="bg-white border border-gray-100 p-6 rounded-2xl shadow-sm relative overflow-hidden flex flex-col justify-between">
           <div>
             <p className="text-xs font-mono uppercase text-gray-400 font-bold tracking-wider">Net Profit Index</p>
-            <h3 className="text-3xl font-display font-black text-zinc-800 mt-2">${aggregatedStats.profit.toFixed(2)}</h3>
+            <h3 className="text-3xl font-display font-black text-zinc-800 mt-2">Rs. {aggregatedStats.profit.toFixed(2)}</h3>
           </div>
           <p className="text-[10px] text-green-600 font-bold mt-4">{aggregatedStats.margin}% Net margin ratio index</p>
         </div>
@@ -274,7 +274,7 @@ export default function ReportsModule({ products, transactions, categories }: Re
             <div className="space-y-3 pt-4 text-xs font-sans">
               <div className="flex justify-between border-b border-white/10 pb-2">
                 <span className="opacity-70">Average Ticket Size:</span>
-                <span className="font-mono font-bold">$24.50</span>
+                <span className="font-mono font-bold">Rs. 24.50</span>
               </div>
               <div className="flex justify-between border-b border-white/10 pb-2">
                 <span className="opacity-70">Items Per Transaction:</span>
@@ -327,8 +327,8 @@ export default function ReportsModule({ products, transactions, categories }: Re
                   <td className="py-4 px-6 font-mono font-bold text-[#580c1f]">{row.id}</td>
                   <td className="py-4 px-6 font-bold text-gray-700">{row.category}</td>
                   <td className="py-4 px-6 text-gray-500 font-sans">{row.items}</td>
-                  <td className="py-4 px-6 text-center font-mono font-bold text-zinc-800">${row.revenue.toFixed(2)}</td>
-                  <td className="py-4 px-6 text-center font-mono font-semibold text-red-600">${row.cost.toFixed(2)}</td>
+                  <td className="py-4 px-6 text-center font-mono font-bold text-zinc-800">Rs. {row.revenue.toFixed(2)}</td>
+                  <td className="py-4 px-6 text-center font-mono font-semibold text-red-600">Rs. {row.cost.toFixed(2)}</td>
                   <td className="py-4 px-6 text-center">
                     <span 
                       className={`inline-block px-2 text-[9px] font-extrabold uppercase rounded-full ${
@@ -343,7 +343,7 @@ export default function ReportsModule({ products, transactions, categories }: Re
                     </span>
                   </td>
                   <td className={`py-4 px-6 text-right font-mono font-bold ${row.profit >= 0 ? 'text-green-700' : 'text-red-600'}`}>
-                    {row.profit >= 0 ? '+' : ''}${row.profit.toFixed(2)}
+                    {row.profit >= 0 ? '+' : ''}Rs. {row.profit.toFixed(2)}
                   </td>
                 </tr>
               ))}
@@ -351,10 +351,10 @@ export default function ReportsModule({ products, transactions, categories }: Re
               {/* Daily totals calculation row matching visual layout */}
               <tr className="bg-zinc-50 font-bold border-t border-zinc-200">
                 <td colSpan={3} className="py-4 px-6 font-display text-gray-800">Daily Totals Summary</td>
-                <td className="py-4 px-6 text-center font-mono text-[#580c1f]">${aggregatedStats.sales.toFixed(2)}</td>
-                <td className="py-4 px-6 text-center font-mono text-neutral-600">${aggregatedStats.expenses.toFixed(2)}</td>
+                <td className="py-4 px-6 text-center font-mono text-[#580c1f]">Rs. {aggregatedStats.sales.toFixed(2)}</td>
+                <td className="py-4 px-6 text-center font-mono text-neutral-600">Rs. {aggregatedStats.expenses.toFixed(2)}</td>
                 <td className="py-4 px-6 text-center font-sans uppercase text-[10px] text-green-700 tracking-wider">Processed</td>
-                <td className="py-4 px-6 text-right font-mono text-green-700">+${aggregatedStats.profit.toFixed(2)}</td>
+                <td className="py-4 px-6 text-right font-mono text-green-700">+Rs. {aggregatedStats.profit.toFixed(2)}</td>
               </tr>
             </tbody>
           </table>

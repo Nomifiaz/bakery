@@ -205,12 +205,12 @@ export default function PurchasesManagement({
                     <td className="py-4 px-6 space-y-1">
                       {po.items.map((item, id) => (
                         <div key={id} className="text-gray-600">
-                          • {item.name} <span className="font-mono text-gray-400 text-[10px]">({item.quantity} units @ ${item.costPrice.toFixed(2)})</span>
+                          • {item.name} <span className="font-mono text-gray-400 text-[10px]">({item.quantity} units @ Rs. {item.costPrice.toFixed(2)})</span>
                         </div>
                       ))}
                     </td>
                     <td className="py-4 px-6 font-mono font-bold text-gray-900">
-                      ${po.totalCost.toFixed(2)}
+                      Rs. {po.totalCost.toFixed(2)}
                     </td>
                     <td className="py-4 px-6 font-mono text-zinc-500">
                       {po.orderDate}
@@ -275,18 +275,18 @@ export default function PurchasesManagement({
                     <div className="grid grid-cols-2 gap-4 text-xs">
                       <div>
                         <span className="text-gray-400 block font-mono">Paid Total:</span>
-                        <span className="font-mono font-bold text-gray-700">${totalDebits.toFixed(2)}</span>
+                        <span className="font-mono font-bold text-gray-700">Rs. {totalDebits.toFixed(2)}</span>
                       </div>
                       <div>
                         <span className="text-gray-400 block font-mono">Shipped Value:</span>
-                        <span className="font-mono font-bold text-gray-700">${totalCredits.toFixed(2)}</span>
+                        <span className="font-mono font-bold text-gray-700">Rs. {totalCredits.toFixed(2)}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="mt-6 flex justify-between items-baseline bg-zinc-50 rounded-xl p-3 border border-gray-100">
                     <span className="text-xs font-bold text-gray-500">Balance Owed:</span>
-                    <span className="text-base font-mono font-black text-[#580c1f]">${balanceOwed.toFixed(2)}</span>
+                    <span className="text-base font-mono font-black text-[#580c1f]">Rs. {balanceOwed.toFixed(2)}</span>
                   </div>
                 </div>
               );
@@ -322,8 +322,8 @@ export default function PurchasesManagement({
                       </td>
                       <td className="py-4 px-6 font-sans text-gray-600">{entry.description}</td>
                       <td className="py-4 px-6 text-zinc-550">{entry.date}</td>
-                      <td className="py-4 px-6 text-center font-bold text-green-700">${entry.debit.toFixed(2)}</td>
-                      <td className="py-4 px-6 text-center font-bold text-red-600">${entry.credit.toFixed(2)}</td>
+                      <td className="py-4 px-6 text-center font-bold text-green-700">Rs. {entry.debit.toFixed(2)}</td>
+                      <td className="py-4 px-6 text-center font-bold text-red-600">Rs. {entry.credit.toFixed(2)}</td>
                     </tr>
                   ))}
                   {ledger.length === 0 && (
@@ -366,7 +366,7 @@ export default function PurchasesManagement({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-1">Payment Debit Amount ($) *</label>
+                <label className="block text-xs font-bold text-gray-500 mb-1">Payment Debit Amount (Rs.) *</label>
                 <input
                   type="number"
                   step="0.01"
@@ -455,7 +455,7 @@ export default function PurchasesManagement({
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-gray-400 block font-bold mb-0.5">Replenish Unit Cost ($)</label>
+                    <label className="text-[10px] text-gray-400 block font-bold mb-0.5">Replenish Unit Cost (Rs.)</label>
                     <input
                       type="number"
                       step="0.01"
@@ -482,10 +482,10 @@ export default function PurchasesManagement({
                   <div key={idx} className="bg-[#FDFCF7] border border-gray-100 rounded-lg p-2 flex justify-between items-center text-xs">
                     <div>
                       <span className="font-semibold text-gray-800">{item.name}</span>
-                      <span className="text-[10px] font-mono text-zinc-400 block">{item.quantity} units @ ${item.costPrice.toFixed(2)} each</span>
+                      <span className="text-[10px] font-mono text-zinc-400 block">{item.quantity} units @ Rs. {item.costPrice.toFixed(2)} each</span>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <span className="font-bold text-gray-700 font-mono">${(item.quantity * item.costPrice).toFixed(2)}</span>
+                      <span className="font-bold text-gray-700 font-mono">Rs. {(item.quantity * item.costPrice).toFixed(2)}</span>
                       <button
                         type="button"
                         onClick={() => handleRemovePOItem(idx)}
@@ -502,7 +502,7 @@ export default function PurchasesManagement({
               {poItems.length > 0 && (
                 <div className="border-t border-dashed border-gray-200 pt-3 flex justify-between items-baseline text-xs font-bold text-gray-800">
                   <span>Grand PO Value:</span>
-                  <span className="font-mono text-base text-[#580c1f]">${poTotalValue.toFixed(2)}</span>
+                  <span className="font-mono text-base text-[#580c1f]">Rs. {poTotalValue.toFixed(2)}</span>
                 </div>
               )}
             </div>

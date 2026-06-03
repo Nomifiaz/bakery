@@ -187,7 +187,7 @@ export default function Dashboard({
           <div className="flex justify-between items-start">
             <div>
               <p className="text-xs font-mono uppercase tracking-wider text-gray-400 font-semibold">Today's Sales</p>
-              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">${(stats.sales || 2450).toFixed(2)}</h3>
+              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">Rs. {(stats.sales || 2450).toFixed(2)}</h3>
             </div>
             <span className="p-2 bg-red-50 rounded-xl text-[#580c1f]">
               <ShoppingBag className="w-5 h-5" />
@@ -204,7 +204,7 @@ export default function Dashboard({
           <div className="flex justify-between items-start">
             <div>
               <p className="text-xs font-mono uppercase tracking-wider text-gray-400 font-semibold">Net Profit</p>
-              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">${(stats.profit || 1120.50).toFixed(2)}</h3>
+              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">Rs. {(stats.profit || 1120.50).toFixed(2)}</h3>
             </div>
             <span className="p-2 bg-emerald-50 rounded-xl text-emerald-700">
               <Coins className="w-5 h-5" />
@@ -221,7 +221,7 @@ export default function Dashboard({
           <div className="flex justify-between items-start">
             <div>
               <p className="text-xs font-mono uppercase tracking-wider text-gray-400 font-semibold">Waste / Loss</p>
-              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">${stats.loss.toFixed(2)}</h3>
+              <h3 className="text-2xl font-bold font-display text-gray-800 mt-2">Rs. {stats.loss.toFixed(2)}</h3>
             </div>
             <span className="p-2 bg-orange-50 rounded-xl text-orange-600">
               <AlertOctagon className="w-5 h-5" />
@@ -409,7 +409,7 @@ export default function Dashboard({
                     {new Date(tx.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(tx.date).toLocaleDateString([], { month: 'short', day: 'numeric' })}
                   </td>
                   <td className="py-4 px-6 text-right font-mono font-bold text-gray-800">
-                    ${tx.total.toFixed(2)}
+                    Rs. {tx.total.toFixed(2)}
                   </td>
                 </tr>
               ))}
