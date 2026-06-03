@@ -298,6 +298,13 @@ export default function App() {
             onSubmitTransaction={handleSubmitTransaction}
             transactions={transactions}
             onUpdateTransactionStatus={handleUpdateTransactionStatus}
+            onBack={() => {
+              if (userRole === 'Cashier') {
+                setActiveTab('customers');
+              } else {
+                setActiveTab('dashboard');
+              }
+            }}
           />
         );
       case 'products':
@@ -370,17 +377,19 @@ export default function App() {
     <div id="applet-viewport-frame" className="min-h-screen bg-[#FAF9F6] text-zinc-800 flex font-sans overflow-x-hidden antialiased">
       
       {/* Sidebar Navigation */}
-      <Sidebar 
-        activeTab={activeTab === 'products' ? 'inventory' : activeTab} // unify products & central inventory
-        setActiveTab={setActiveTab}
-        resetCashierPOS={resetCashierPOSData}
-        userRole={userRole}
-        setUserRole={setUserRole}
-        settings={settings}
-      />
+      {activeTab !== 'pos' && (
+        <Sidebar 
+          activeTab={activeTab === 'products' ? 'inventory' : activeTab} // unify products & central inventory
+          setActiveTab={setActiveTab}
+          resetCashierPOS={resetCashierPOSData}
+          userRole={userRole}
+          setUserRole={setUserRole}
+          settings={settings}
+        />
+      )}
 
       {/* Main viewport area */}
-      <div id="content-container" className="flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden pl-64">
+      <div id="content-container" className={`flex-1 flex flex-col min-w-0 min-h-screen overflow-x-hidden ${activeTab === 'pos' ? 'pl-0' : 'pl-64'}`}>
         
         {/* Top bar header */}
         <header id="top-bar-app" className="bg-[#FAF9F6] border-b border-gray-100 h-16 px-8 flex items-center justify-between flex-none select-none">

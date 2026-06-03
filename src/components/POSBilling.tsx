@@ -16,7 +16,8 @@ import {
   Printer, 
   CornerDownLeft, 
   ShoppingCart,
-  UserCheck
+  UserCheck,
+  ArrowLeft
 } from 'lucide-react';
 import { Product, Category, CartItem, Customer, Transaction, BakerySettings } from '../types';
 
@@ -28,6 +29,7 @@ interface POSBillingProps {
   onSubmitTransaction: (tx: Transaction) => Promise<void>;
   transactions: Transaction[]; // for merge/resume purposes
   onUpdateTransactionStatus?: (id: string, status: 'Paid' | 'Hold' | 'Void') => Promise<void>;
+  onBack?: () => void;
 }
 
 export default function POSBilling({ 
@@ -37,7 +39,8 @@ export default function POSBilling({
   settings, 
   onSubmitTransaction, 
   transactions,
-  onUpdateTransactionStatus 
+  onUpdateTransactionStatus,
+  onBack
 }: POSBillingProps) {
   // Navigation & Filter States
   const [activeCategoryId, setActiveCategoryId] = useState<string>('all');
@@ -354,6 +357,16 @@ export default function POSBilling({
         
         {/* Search header with Barcode submission */}
         <div className="mb-4 flex flex-col sm:flex-row gap-3">
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              className="flex items-center justify-center px-4 py-2.5 bg-white border border-gray-200 hover:bg-red-50/50 hover:text-[#580c1f] hover:border-red-200 text-gray-700 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer shadow-sm hover:scale-[1.01] active:scale-[0.99]"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              <span>Exit POS</span>
+            </button>
+          )}
           <form onSubmit={handleBarcodeSubmit} className="relative flex-1">
             <Search className="absolute left-3.5 top-3 w-4 h-4 text-gray-400" />
             <input
