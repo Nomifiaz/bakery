@@ -46,6 +46,17 @@ export default function PurchasesManagement({
   const [itemQty, setItemQty] = useState('1');
   const [itemCost, setItemCost] = useState('');
 
+  // Auto-select general/first supplier when creating PO modal opens
+  React.useEffect(() => {
+    if (isPOModalOpen && suppliers.length > 0) {
+      const generalSupplier = suppliers.find(s => 
+        s.name.toLowerCase().includes('general') || 
+        s.name.toLowerCase().includes('global')
+      ) || suppliers[0];
+      setPoSupplierId(generalSupplier.id);
+    }
+  }, [isPOModalOpen, suppliers]);
+
   // Auto supplier calculation
   const selectedSupplierDetail = useMemo(() => {
     return suppliers.find(s => s.id === poSupplierId);
@@ -413,18 +424,11 @@ export default function PurchasesManagement({
 
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
               <div>
-                <label className="block text-xs font-bold text-gray-500 mb-1">Select Ingredient Supplier *</label>
-                <select
-                  required
-                  value={poSupplierId}
-                  onChange={(e) => setPoSupplierId(e.target.value)}
-                  className="w-full bg-white border border-gray-200 rounded-xl p-2.5 text-xs outline-none cursor-pointer"
-                >
-                  <option value="">Choose Supplier...</option>
-                  {suppliers.map(s => (
-                    <option key={s.id} value={s.id}>{s.name} ({s.contact})</option>
-                  ))}
-                </select>
+                <label className="block text-xs font-bold text-gray-500 mb-1">Ingredient Supplier (Auto-Fixed)</label>
+                <div className="bg-zinc-50 border border-zinc-200 text-zinc-700 rounded-xl p-3 text-xs font-bold flex justify-between items-center">
+                  <span>{selectedSupplierDetail?.name || 'Global Flour Co.'}</span>
+                  <span className="text-[10px] text-zinc-400 font-normal">Contact: {selectedSupplierDetail?.contact || 'Michael Scott'}</span>
+                </div>
               </div>
 
               {/* Items builder frame */}
@@ -435,7 +439,16 @@ export default function PurchasesManagement({
                   <div className="col-span-2">
                     <select
                       value={itemProductId}
-                      onChange={(e) => setItemProductId(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setItemProductId(val);
+                        const prod = products.find(p => p.id === val);
+                        if (prod) {
+                          setItemCost(prod.purchasePrice.toString());
+                        } else {
+                          setItemCost('');
+                        }
+                      }}
                       className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs outline-none cursor-pointer"
                     >
                       <option value="">Select Catalog Product...</option>
