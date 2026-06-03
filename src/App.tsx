@@ -174,6 +174,7 @@ export default function App() {
     const updated = [...products, prod];
     setProducts(updated);
     await triggerDatabaseSync({ products: updated, categories, transactions, customers, suppliers, ledger, purchases, settings });
+    setActiveTab('dashboard');
   };
 
   const handleUpdateProduct = async (prod: Product) => {

@@ -116,6 +116,52 @@ export default function PurchasesManagement({
     setPoItems([]);
   };
 
+  const handleDirectRestockSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!itemProductId) {
+      alert('Please select a product to restock.');
+      return;
+    }
+    const prod = products.find(p => p.id === itemProductId);
+    if (!prod) return;
+
+    const qty = Math.max(1, parseInt(itemQty) || 1);
+    const cost = Math.max(0, parseFloat(itemCost) || 0);
+
+    const supplierId = poSupplierId || (suppliers.length > 0 ? (suppliers.find(s => 
+      s.name.toLowerCase().includes('general') || 
+      s.name.toLowerCase().includes('global')
+    )?.id || suppliers[0].id) : 'supplier-default');
+
+    const supplierName = suppliers.find(s => s.id === supplierId)?.name || 'Global Flour Co.';
+
+    const newItem: PurchaseOrderItem = {
+      productId: itemProductId,
+      name: prod.name,
+      quantity: qty,
+      costPrice: cost
+    };
+
+    const order: PurchaseOrder = {
+      id: 'po-' + Date.now(),
+      supplierId,
+      supplierName,
+      orderDate: new Date().toISOString().split('T')[0],
+      status: 'Received',
+      items: [newItem],
+      totalCost: qty * cost
+    };
+
+    await onSubmitPO(order);
+    alert(`Successfully replenished stock! Added ${qty} units of ${prod.name} at Rs. ${cost.toFixed(2)} each.`);
+
+    // Reset and close
+    setIsPOModalOpen(false);
+    setItemProductId('');
+    setItemQty('1');
+    setItemCost('');
+  };
+
   // Turn Sent PO into Received PO
   const handleMarkReceived = async (po: PurchaseOrder) => {
     const updated = {
@@ -413,13 +459,13 @@ export default function PurchasesManagement({
       {/* DIALOG 2: Create Purchase Restock Order */}
       {isPOModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 font-sans animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+          <form onSubmit={handleDirectRestockSubmit} className="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div className="p-5 border-b border-gray-100 bg-[#FDFCF7] flex justify-between items-center">
               <h3 className="font-display font-extrabold text-[#580c1f] text-sm flex items-center">
                 <Truck className="w-4 h-4 mr-1.5" />
-                Draft Supplier Restock PO
+                Direct Stock Replenishment
               </h3>
-              <button onClick={() => setIsPOModalOpen(false)} className="text-gray-400">✕</button>
+              <button type="button" onClick={() => setIsPOModalOpen(false)} className="text-gray-400">✕</button>
             </div>
 
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
@@ -432,121 +478,78 @@ export default function PurchasesManagement({
               </div>
 
               {/* Items builder frame */}
-              <div className="bg-zinc-50 rounded-2xl p-4 space-y-3 border border-gray-50">
-                <span className="text-xs font-extrabold text-zinc-600 block">Add Ingredient / Restock Item</span>
-                
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-1">Select Catalog Product *</label>
+                  <select
+                    required
+                    value={itemProductId}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setItemProductId(val);
+                      const prod = products.find(p => p.id === val);
+                      if (prod) {
+                        setItemCost(prod.purchasePrice.toString());
+                      } else {
+                        setItemCost('');
+                      }
+                    }}
+                    className="w-full bg-white border border-gray-200 rounded-xl p-2.5 text-xs outline-none cursor-pointer font-bold text-zinc-800"
+                  >
+                    <option value="">Select Catalog Product...</option>
+                    {products.map(p => (
+                      <option key={p.id} value={p.id}>{p.name} (Current unit: {p.stockQuantity})</option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="grid grid-cols-2 gap-3">
-                  <div className="col-span-2">
-                    <select
-                      value={itemProductId}
-                      onChange={(e) => {
-                        const val = e.target.value;
-                        setItemProductId(val);
-                        const prod = products.find(p => p.id === val);
-                        if (prod) {
-                          setItemCost(prod.purchasePrice.toString());
-                        } else {
-                          setItemCost('');
-                        }
-                      }}
-                      className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs outline-none cursor-pointer"
-                    >
-                      <option value="">Select Catalog Product...</option>
-                      {products.map(p => (
-                        <option key={p.id} value={p.id}>{p.name} (Current unit: {p.stockQuantity})</option>
-                      ))}
-                    </select>
-                  </div>
                   <div>
-                    <label className="text-[10px] text-gray-400 block font-bold mb-0.5">Quantity to Order</label>
+                    <label className="text-[10px] text-gray-400 block font-bold mb-1">Quantity to Restock *</label>
                     <input
+                      required
                       type="number"
+                      min="1"
                       placeholder="Qty"
                       value={itemQty}
                       onChange={(e) => setItemQty(e.target.value)}
-                      className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs outline-none"
+                      className="w-full bg-white border border-gray-200 rounded-xl p-2.5 text-xs outline-none font-bold"
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] text-gray-400 block font-bold mb-0.5">Replenish Unit Cost (Rs.)</label>
+                    <label className="text-[10px] text-gray-400 block font-bold mb-1">Cost Price per Unit (Rs.) *</label>
                     <input
+                      required
                       type="number"
                       step="0.01"
+                      min="0"
                       placeholder="e.g. 1.20"
                       value={itemCost}
                       onChange={(e) => setItemCost(e.target.value)}
-                      className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs outline-none font-mono"
+                      className="w-full bg-white border border-gray-200 rounded-xl p-2.5 text-xs outline-none font-mono font-bold"
                     />
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={handleAddPOItem}
-                  className="w-full py-2 bg-zinc-200 hover:bg-zinc-300 text-zinc-700 text-xs font-bold rounded-xl cursor-pointer"
-                >
-                  + Append Item below
-                </button>
               </div>
-
-              {/* Added items list */}
-              <div className="space-y-1.5 max-h-[140px] overflow-y-auto">
-                {poItems.map((item, idx) => (
-                  <div key={idx} className="bg-[#FDFCF7] border border-gray-100 rounded-lg p-2 flex justify-between items-center text-xs">
-                    <div>
-                      <span className="font-semibold text-gray-800">{item.name}</span>
-                      <span className="text-[10px] font-mono text-zinc-400 block">{item.quantity} units @ Rs. {item.costPrice.toFixed(2)} each</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <span className="font-bold text-gray-700 font-mono">Rs. {(item.quantity * item.costPrice).toFixed(2)}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleRemovePOItem(idx)}
-                        className="text-red-500 text-xs hover:underline cursor-pointer"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Total Summary */}
-              {poItems.length > 0 && (
-                <div className="border-t border-dashed border-gray-200 pt-3 flex justify-between items-baseline text-xs font-bold text-gray-800">
-                  <span>Grand PO Value:</span>
-                  <span className="font-mono text-base text-[#580c1f]">Rs. {poTotalValue.toFixed(2)}</span>
-                </div>
-              )}
             </div>
 
             <div className="p-4 bg-gray-50 border-t border-gray-100 flex items-center justify-between">
               <button
                 type="button"
                 onClick={() => setIsPOModalOpen(false)}
-                className="py-2 px-4 border border-gray-200 hover:bg-zinc-100 text-xs font-extrabold text-gray-500 rounded-xl cursor-pointer"
+                className="py-2.5 px-4 border border-gray-200 hover:bg-zinc-100 text-xs font-extrabold text-gray-500 rounded-xl cursor-pointer"
               >
-                Close
+                Cancel
               </button>
 
-              <div className="flex space-x-2">
-                <button
-                  type="button"
-                  onClick={() => handleCreatePOSubmit('Sent')}
-                  className="py-2.5 px-4 bg-zinc-700 hover:bg-zinc-600 text-white text-xs font-bold rounded-xl cursor-pointer"
-                >
-                  Send to Supplier
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleCreatePOSubmit('Received')}
-                  className="py-2.5 px-4 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer"
-                >
-                  Receive Stock Directly
-                </button>
-              </div>
+              <button
+                type="submit"
+                className="py-2.5 px-5 bg-green-700 hover:bg-green-800 text-white text-xs font-bold rounded-xl shadow-md cursor-pointer transition-transform active:scale-[0.98]"
+              >
+                Add to Stock
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       )}
 
