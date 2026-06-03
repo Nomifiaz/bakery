@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-display: "Outfit", "Inter", sans-serif;
+
+  --color-brand-primary: #580c1f; /* Elegant burgundy color seen in screenshots */
+  --color-brand-bg: #FAF9F6; /* Warm flour/off-white background */
+  --color-cream-light: #Fdfcf7;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+body {
+  background-color: var(--color-brand-bg);
+  font-family: var(--font-sans);
+  color: #1f2937;
+  overflow-x: hidden;
+}
+
+/* Receipt Animations / Mock POS Feel */
+.receipt-paper {
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.01) 50%, transparent 50%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.01) 50%, transparent 50%);
+  background-size: 4px 4px, 4px 4px;
+}

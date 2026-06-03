@@ -1,0 +1,6 @@
+{
+  "name": "Artisan Bakehouse",
+  "description": "A beautiful, offline-first Bakery POS Web Application with real-time billing, offline stock synchronization, interactive products catalog, sales trends, inventory, and comprehensive reporting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
