@@ -99,6 +99,41 @@ export default function POSBilling({
     }
   };
 
+  // Real-time instant auto-add on exact barcode/SKU scan match (Direct to Cart)
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed) return;
+
+    const match = products.find(
+      p => p.barcode === trimmed || p.sku.toLowerCase() === trimmed.toLowerCase()
+    );
+    if (match) {
+      // Ex stock depletion sanity warning
+      if (match.stockQuantity <= 0) {
+        alert(`Warning: ${match.name} is marked Out of Stock! Still billing, but check inventory.`);
+      }
+
+      setCart(prev => {
+        const existing = prev.find(item => item.productId === match.id);
+        if (existing) {
+          return prev.map(item => 
+            item.productId === match.id 
+              ? { ...item, quantity: item.quantity + 1 }
+              : item
+          );
+        }
+        return [...prev, {
+          id: 'cart-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4),
+          productId: match.id,
+          name: match.name,
+          price: match.salePrice,
+          quantity: 1
+        }];
+      });
+      setSearchQuery('');
+    }
+  }, [searchQuery, products]);
+
   // Switch customer discount percentages if loyal
   const currentCustomer = useMemo(() => {
     return customers.find(c => c.id === selectedCustomerId);

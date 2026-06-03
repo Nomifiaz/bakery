@@ -83,7 +83,7 @@ export default function InventoryManagement({
     } else {
       setEditingProduct(null);
       setFormName('');
-      setFormBarcode(String(Math.floor(100000000 + Math.random() * 900000000)));
+      setFormBarcode('');
       setFormSKU('AB-' + Math.floor(100 + Math.random() * 900) + '-' + Math.random().toString(36).substr(2, 3).toUpperCase());
       setFormCategoryId(categories[0]?.id || '');
       setFormPurchasePrice('');
@@ -488,13 +488,23 @@ export default function InventoryManagement({
 
                 <div>
                   <label className="block text-xs font-bold text-gray-500 mb-1">EAN/UPC Barcode *</label>
-                  <input
-                    type="text"
-                    required
-                    value={formBarcode}
-                    onChange={(e) => setFormBarcode(e.target.value)}
-                    className="w-full bg-white border border-gray-200 focus:border-[#580c1f] rounded-xl p-2.5 text-xs font-mono outline-none"
-                  />
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      required
+                      placeholder="Scan/Type Barcode..."
+                      value={formBarcode}
+                      onChange={(e) => setFormBarcode(e.target.value)}
+                      className="flex-1 min-w-0 bg-white border border-gray-200 focus:border-[#580c1f] rounded-xl p-2.5 text-xs font-mono outline-none"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormBarcode(String(Math.floor(100000000000 + Math.random() * 900000000000)))}
+                      className="px-3.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 text-xs font-bold rounded-xl transition-all cursor-pointer flex items-center justify-center border border-zinc-200 whitespace-nowrap active:scale-95"
+                    >
+                      Auto-Gen
+                    </button>
+                  </div>
                 </div>
 
                 <div>
